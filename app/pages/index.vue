@@ -298,7 +298,7 @@ onMounted(() => {
               <h3 class="title text-2xl! max-w-2/3 w-full">
                 Forms wheel
               </h3>
-              <p>Custom form selection interface for skins with multiple forms, such as Elementalist Lux</p>
+              <p>Custom form selection interface for skins with multiple forms (Elementalist Lux, Sahn Uzal Mordekaiser, Spirit Blossom Morgana...)</p>
             </div>
           </div>
         </div>
@@ -330,7 +330,10 @@ onMounted(() => {
       </section>
       <section class="flex flex-col items-center gap-10 p-20 text-center bg-primary-600 rounded-lg">
         <h2 class="font-bold text-5xl text-slate-50">Get rose for free</h2>
-        <UButton :to="latestDownloadUrl" color="neutral" size="xl" target="_blank">Download latest version</UButton>
+        <div class="flex items-center gap-4">
+          <UButton :to="latestDownloadUrl" color="neutral" size="xl" target="_blank">Download latest version</UButton>
+          <UButton to="/changelogs" color="neutral" variant="ghost" size="xl">Changelogs</UButton>
+        </div>
       </section>
     </UContainer>
   </main>
