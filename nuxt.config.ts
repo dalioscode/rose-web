@@ -1,4 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+const repositoryName = process.env.GITHUB_REPOSITORY?.split('/')[1]
+const baseURL = process.env.NUXT_APP_BASE_URL
+  ?? (process.env.GITHUB_ACTIONS === 'true' && repositoryName ? `/${repositoryName}/` : '/')
+
 export default defineNuxtConfig({
   runtimeConfig: {
     githubToken: process.env.GITHUB_TOKEN ?? '',
@@ -7,6 +11,7 @@ export default defineNuxtConfig({
     }
   },
   app: {
+    baseURL,
     head: {
       meta: [
         { name: 'robots', content: 'noindex, nofollow' }
