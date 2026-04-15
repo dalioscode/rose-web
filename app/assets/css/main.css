@@ -1,0 +1,26 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+    --font-main: 'Jetbrains Mono', monospace;
+}
+
+@theme static {
+    --color-brand-50: #fef2f2;
+    --color-brand-100: #fde6e6;
+    --color-brand-200: #fad1d3;
+    --color-brand-300: #f5acb0;
+    --color-brand-400: #ef7d85;
+    --color-brand-500: #e54e5d;
+    --color-brand-600: #d02e46;
+    --color-brand-700: #af2139;
+    --color-brand-800: #8e1d34;
+    --color-brand-900: #7e1d34;
+    --color-brand-950: #460b17;
+}
+
+@layer utilities {
+    .title {
+        @apply font-black text-slate-950 text-4xl tracking-tight
+    }
+}
