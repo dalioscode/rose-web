@@ -26,21 +26,17 @@ const { state: model } = useLoader(
     }
 )
 
-// ── Template refs ─────────────────────────────────────────────────────────────
 const canvasWrapperRef = ref<HTMLElement | null>(null)
 const badgeRef         = ref<HTMLElement | null>(null)
 const h1Ref            = ref<HTMLElement | null>(null)
 const pRef             = ref<HTMLElement | null>(null)
 const buttonsRowRef    = ref<HTMLElement | null>(null)
 
-// ── Final composition tuning ──────────────────────────────────────────────────
 const ROSE_SCALE = 8.8
 const roseFinalY = -8.6
 const roseLookAtY = -2.2
 const ROSE_Z = 1.9
 
-// ── Camera setup ──────────────────────────────────────────────────────────────
-// Radius and Theta for positioning the camera in the YZ plane (X=0).
 const CAM_R = 7.6
 const CAM_THETA_FINAL = 0.5
 const CAM_THETA_START = 1.02
@@ -57,32 +53,25 @@ const cameraPos = computed<[number, number, number]>(() => [
   CAM_R * Math.cos(camOrbit.theta),
 ])
 
-// ── Chromatic aberration ──────────────────────────────────────────────────────
 const chromaticOffset = reactive({ x: 0, y: 0 })
 const chromaticVector = computed(() => new Vector2(chromaticOffset.x, chromaticOffset.y))
 
-// ── Depth of field blur ───────────────────────────────────────────────────────
 const dof = reactive({ bokehScale: 0 })
 
-// ── Dissolve uniform ──────────────────────────────────────────────────────────
 const dissolveUniform = { value: 0 }
 
-// ── Rose 3D position ──────────────────────────────────────────────────────────
 const rosePose = reactive({ y: -10 })
 
-// ── Debug helper ──────────────────────────────────────────────────────────────
 watch([cameraPos, () => rosePose.y], ([cam, roseY]) => {
   console.log(`Camera: ${cam[0].toFixed(2)}, ${cam[1].toFixed(2)}, ${cam[2].toFixed(2)} | Rose Y: ${roseY.toFixed(2)} | LookAt: [0, ${roseLookAtY}, 0]`)
 })
 
 function triggerGlitch() {
-  // Randomized CA spike values
   const caX      = 0.0012 + Math.random() * 0.003
   const caY      = 0.0006 + Math.random() * 0.0018
   const spike    = 0.02   + Math.random() * 0.025
   const decay    = 0.1    + Math.random() * 0.12
 
-  // Chromatic aberration spike → decay → reschedule
   gsap.to(chromaticOffset, {
     x: caX, y: caY, duration: spike, ease: 'none',
     onComplete() {
@@ -95,11 +84,9 @@ function triggerGlitch() {
 }
 
 function scheduleGlitch() {
-  // Keep glitches sparse and subtle.
   setTimeout(triggerGlitch, 11000 + Math.random() * 9000)
 }
 
-// ── Dissolve shader injection ─────────────────────────────────────────────────
 function applyDissolveToScene(scene: Object3D) {
   scene.traverse((child) => {
     const mesh = child as Mesh
@@ -132,7 +119,6 @@ function applyDissolveToScene(scene: Object3D) {
   })
 }
 
-// ── Phase 2: text reveal ──────────────────────────────────────────────────────
 function animateText() {
   const tl = gsap.timeline()
 
@@ -158,7 +144,6 @@ function animateText() {
   tl.to(btns, { autoAlpha: 1, duration: 0.35, ease: 'power2.out', stagger: 0.1 }, '>-0.2')
 }
 
-// ── Phase 1: rose + camera entrance ──────────────────────────────────────────
 function animateRose() {
   if (model.value?.scene) {
     applyDissolveToScene(model.value.scene)
@@ -175,7 +160,6 @@ function animateRose() {
     ease: 'power2.out',
   })
 
-  // Rose: dissolve in + slide up
   gsap.timeline({
     onComplete() {
       scheduleGlitch()
@@ -186,7 +170,6 @@ function animateRose() {
       .to(rosePose, { y: roseFinalY, duration: 0.8, ease: 'power2.out' }, '<')
 }
 
-// ── Bootstrap ─────────────────────────────────────────────────────────────────
 onMounted(() => {
   if (!import.meta.client) return
 
