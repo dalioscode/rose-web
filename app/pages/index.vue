@@ -14,13 +14,14 @@ const { public: { discordUrl } } = useRuntimeConfig()
 const { data: releasesData } = await useFetch<GithubReleasesResponse>('/api/github/releases')
 const totalDownloads = computed(() => releasesData.value?.totalDownloads ?? 0)
 const latestDownloadUrl = computed(() => releasesData.value?.latestDownloadUrl ?? undefined)
+const roseModelUrl = `${import.meta.env.BASE_URL}rose.glb`
 
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
 
 const { state: model } = useLoader(
     GLTFLoader,
-    '/rose.glb',
+    roseModelUrl,
     (loader) => {
       (loader as GLTFLoader).setDRACOLoader(dracoLoader)
     }
