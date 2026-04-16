@@ -7,14 +7,16 @@ import type { Mesh, MeshStandardMaterial, Object3D } from 'three'
 import type { GithubReleasesResponse } from '~/shared/types/github'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
+import { joinURL } from 'ufo'
 
 definePageMeta({ layout: false })
 
 const { public: { discordUrl } } = useRuntimeConfig()
+const { app: { baseURL } } = useRuntimeConfig()
 const { data: releasesData } = await useFetch<GithubReleasesResponse>('/api/github/releases')
 const totalDownloads = computed(() => releasesData.value?.totalDownloads ?? 0)
 const latestDownloadUrl = computed(() => releasesData.value?.latestDownloadUrl ?? undefined)
-const roseModelUrl = `${import.meta.env.BASE_URL}rose.glb`
+const roseModelUrl = joinURL(baseURL, 'rose.glb')
 
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
